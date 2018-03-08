@@ -1,0 +1,29 @@
+---
+title: "data_wrangling_steps"
+output: html_document
+---
+
+ 
+** **
+The following texts summarizes the important steps for cleaning up the data of software architechtural styles.
+ 
+ 
+**Renamed variables names to keep simple and meaningful **
+
+Some of the column names in the original dataset were relatively long. Short and simple names were given to represent the actual meaning of the columns. (See comments in R codes)
+
+**Separated variable "Industry" **
+
+The variable "Industry" contained various format of values taking from the original survey. Separating the responses to tidy the data.
+
+**Shortened variable "Education" **
+
+The variable "Education" contained redundant information. Removing the additional information to tidy the data.
+
+**Checked the uniqueness of observations **
+
+Some of the observations might be duplicated entries that have happened due to various reasons. Removing the duplicates when found to tidy the data.
+
+**Checked missing values **
+
+Some of the observations might be missing values that have happened due to various reasons. Omitting the observations that contain missing values when found to tidy the data (given the large amount of samples).
