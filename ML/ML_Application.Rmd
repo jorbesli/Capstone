@@ -1,0 +1,27 @@
+---
+title: "Machine Learning Application"
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+df_print: paged
+---
+  
+The next step going forward will be using the current data to perform more in-depth analysis using machine learning techniques.
+
+###*How do you frame your main question as a machine learning problem?*  
+  
+  Can the model of software architechtural style popularity predict on a particular style is selected for software development?  
+The problem is a supervised problem that uses regression analysis to solve.  
+
+###*What are the main features?*  
+  
+  The main features of the model include "Education level", "Industry", "Architectural style".  
+  
+###*Which machine learning technique will you use?*  
+  
+  The techniques used for the machine learning model are clustering and prediction.  
+
+###*How will you evaluate the success of your machine learning technique? What metric will you use?*  
+  
+  Using 70% of the sample data (as training data) to build a logistic regression model. Then, using the rest of 30% data to test the model, regarding the prediction on a particular software architectural style might be selected.
