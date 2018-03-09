@@ -1,0 +1,126 @@
+---
+title: "Milestone Report"
+output: html_document
+df_print: paged
+---
+  
+  
+##The general problem description (based upon early submission)
+**What is the problem you want to solve?**
+
+The general problem is that software development companies might have a clear idea on the significance of different types of software architectural styles. Hence, the specific problem that companies need to understand the popularity of these software architectural styles.
+
+**Who is your client and why do they care about this problem? In other words, what will your client DO or DECIDE based on your analysis that they wouldn’t have otherwise?**
+
+The potential client for this project could be software development companies, or research agencies. Based upon the data analysis, organiziations could gain a clear understanding on the usage of the different architechtural styles for software development, among various level of software developers.
+
+-**What data are you going to use for this? How will you acquire this data?**
+
+The data are available via Kaggle <http://www.kaggle.com> in a single dataset with various updated versions. These datasets are publicly available for downloading.
+
+**In brief, outline your approach to solving this problem (knowing that this might change later).**
+
+The variables of the project are software architechtural styles, software developers' job experiences, and their education levels. The data analysis will include linear regression and ranking, as well as relevant graph for data visualization. 
+
+**What are your deliverables? Typically, this would include code, along with a paper and/or a slide deck.**
+
+The deliverables of the project include R code, a report (possibly be written by R markdown).
+
+##Data wrangling process
+The following texts summarizes the important steps for cleaning up the data of software architechtural styles.
+ 
+ 
+**Renamed variables names to keep simple and meaningful **
+
+Some of the column names in the original dataset were relatively long. Short and simple names were given to represent the actual meaning of the columns. (See comments in R codes)
+
+**Separated variable "Industry" **
+
+The variable "Industry" contained various format of values taking from the original survey. Separating the responses to tidy the data.
+
+**Shortened variable "Education" **
+
+The variable "Education" contained redundant information. Removing the additional information to tidy the data.
+
+**Checked the uniqueness of observations **
+
+Some of the observations might be duplicated entries that have happened due to various reasons. Removing the duplicates when found to tidy the data.
+
+**Checked missing values **
+
+Some of the observations might be missing values that have happened due to various reasons. Omitting the observations that contain missing values when found to tidy the data (given the large amount of samples).
+  
+*After the data wrangling step, a cleaned copy of dataset is ready for statistical analysis.*
+
+##Preliminary findings
+The following information shows the preliminary analysis to the software architechtural styles survey data.
+
+**First, read the cleaned data as a R object into the workspace and explore the structure of the data frame.**
+
+```{r readRDS, echo=FALSE}
+sasdf <- readRDS("~/Documents/Springboard/Intro to DS/Projects/Capstone/DW/Cleaned_S_A_Styles.rds")
+```
+
+```{r structure, echo= FALSE}
+str(sasdf)
+```
+
+
+```{r mapping_styles, echo= FALSE}
+rawd <- read.csv("~/Documents/Springboard/Intro to DS/Projects/Capstone/DW/S_A_Styles.csv")
+names(rawd) <- gsub("^.*How.Many.", "", names(rawd))
+names(rawd) <- gsub(".Style.*$", "", names(rawd))
+names(rawd) <- gsub(".Architectural$", "", names(rawd))
+names(rawd) <- gsub("\\.$", "", names(rawd))
+names(rawd) <- gsub("\\.$", "", names(rawd))
+names(rawd) <- gsub("^\\.", "", names(rawd))
+names(rawd) <- gsub("\\.", " ", names(rawd))
+mapping_styles <- cbind(names(sasdf[6:23]), names(rawd[6:23]))
+```
+
+```{r mapping, echo=FALSE}
+library(knitr)
+kable(mapping_styles, caption = "A table to map styles")
+```
+
+**Then, using a barplot to show the popularity of the different software architechtural styles.**
+
+```{r barplot vertical, echo=FALSE}
+library(ggplot2)
+counts <- data.frame(colnames(sasdf[6:23]) ,colSums(sasdf[6:23]))
+colnames(counts) <- c("Style", "Frequency")
+rownames(counts) <- c()
+
+  ggplot(counts, aes(x=reorder(Style, Frequency), y=Frequency)) +
+    geom_bar(stat="identity") +
+    labs(x="Style", title = "Architectural Style Popularity")+
+    coord_flip()
+```
+
+**These styles have actually been divided into three groups that are ranked by the popularity.**
+
+The most poupular styles are: 
+```{r groups1, echo=FALSE}
+The_most_popular_styles <- counts$Style[counts$Frequency > 500000]
+as.character(The_most_popular_styles)
+```
+
+Less poupular styles are: 
+```{r groups2, echo=FALSE}
+Less_popular_styles <- counts$Style[counts$Frequency <500000 & counts$Frequency > 250000]
+as.character(Less_popular_styles)
+```
+
+The least poupular styles are: 
+```{r groups3, echo=FALSE}
+The_least_popular_styles <- The_least_popular_styles <- counts$Style[counts$Frequency < 250000]
+as.character(The_least_popular_styles)
+```
+
+##Limitations
+
+The dataset that has been utilized in the project might only contain the limited information about the software architechtual styles being used in the software development process. However, the dataset may demonstrate the popularity of the styles.
+
+##Updated approach
+
+The next step going forward will be using the current data to build a logistic regression model (with 70% of the samples) as training data. Then, using the rest of 30% data to test the model, regarding the prediction on a particular software architectural style might be selected.
