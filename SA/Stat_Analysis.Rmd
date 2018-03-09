@@ -1,0 +1,77 @@
+---
+title: "Statistical Analysis"
+output: html_document
+---
+
+After the data wrangling step, a cleaned copy of dataset is ready for statistical analysis. 
+
+The following information shows the preliminary analysis to the software architechtural styles survey data.
+
+**First, read the cleaned data as a R object into the workspace and explore the structure of the data frame.**
+
+```{r readRDS, echo=FALSE}
+sasdf <- readRDS("~/Documents/Springboard/Intro to DS/Projects/Capstone/DW/Cleaned_S_A_Styles.rds")
+```
+
+```{r structure, echo= FALSE}
+str(sasdf)
+```
+
+
+```{r mapping_styles, echo= FALSE}
+rawd <- read.csv("DW/S_A_Styles.csv")
+names(rawd) <- gsub("^.*How.Many.", "", names(rawd))
+names(rawd) <- gsub(".Style.*$", "", names(rawd))
+names(rawd) <- gsub(".Architectural$", "", names(rawd))
+names(rawd) <- gsub("\\.$", "", names(rawd))
+names(rawd) <- gsub("\\.$", "", names(rawd))
+names(rawd) <- gsub("^\\.", "", names(rawd))
+names(rawd) <- gsub("\\.", " ", names(rawd))
+mapping_styles <- cbind(names(sasdf[6:23]), names(rawd[6:23]))
+```
+
+```{r mapping, echo=FALSE}
+library(knitr)
+kable(mapping_styles, caption = "A table to map styles")
+```
+
+**Then, using a barplot to show the popularity of the different software architechtural styles.**
+
+```{r barplot vertical, echo=FALSE}
+library(ggplot2)
+counts <- data.frame(colnames(sasdf[6:23]) ,colSums(sasdf[6:23]))
+colnames(counts) <- c("Style", "Frequency")
+rownames(counts) <- c()
+
+  ggplot(counts, aes(x=reorder(Style, Frequency), y=Frequency)) +
+    geom_bar(stat="identity") +
+    labs(x="Style", title = "Architectural Style Popularity")+
+    coord_flip()
+```
+
+**These styles have actually been divided into three groups that are ranked by the popularity.**
+
+The most poupular styles are: 
+```{r groups1, echo=FALSE}
+The_most_popular_styles <- counts$Style[counts$Frequency > 500000]
+as.character(The_most_popular_styles)
+```
+
+Less poupular styles are: 
+```{r groups2, echo=FALSE}
+Less_popular_styles <- counts$Style[counts$Frequency <500000 & counts$Frequency > 250000]
+as.character(Less_popular_styles)
+```
+
+The least poupular styles are: 
+```{r groups3, echo=FALSE}
+The_least_popular_styles <- The_least_popular_styles <- counts$Style[counts$Frequency < 250000]
+as.character(The_least_popular_styles)
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
